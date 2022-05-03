@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zym.mapper.BorrowMapper">
+    <resultMap id="borrowResultMap" type="borrow">
+        <result property="bookName" column="book_name"/>
+        <result property="borrowDate" column="borrow_date" />
+        <result property="actualDate" column="actual_date" />
+        <result property="returnDate" column="return_date" />
+    </resultMap>
+
+
+        <select id="selectBefore" resultMap="borrowResultMap">
+            select *from lib.tb_borrow where return_date&gt;now() and username=#{name} and status=0 limit #{begin} , #{size}
+        </select>
+
+        <select id="selectBeforeCount" resultType="java.lang.Integer">
+            select count(*) from lib.tb_borrow where return_date&gt;now() and username=#{name} and status=0
+        </select>
+
+    <select id="selectAfter" resultMap="borrowResultMap">
+        select *from lib.tb_borrow where return_date&lt;now()and username=#{name} and status=0 limit #{begin} , #{size}
+    </select>
+
+    <select id="selectAfterCount" resultType="java.lang.Integer">
+        select count(*) from lib.tb_borrow where return_date&lt;now() and username=#{name} and status=0
+    </select>
+    <select id="selectHistory"  resultMap="borrowResultMap">
+        select *from lib.tb_borrow where username=#{name} and status=1 limit #{begin} , #{size}
+    </select>
+
+    <select id="selectHistoryCount" resultType="java.lang.Integer">
+        select count(*) from lib.tb_borrow where username=#{name} and status=1
+    </select>
+</mapper>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+    <link href="css/login.css" rel="stylesheet">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="loginDiv" v-cloak>
+    <div id="login">
+        <h1 id="loginMsg">USER</h1>
+        <p>Username:<input id="username" v-model="username" type="text"></p>
+        <div id="errorMsg">{{errorMsg}}</div>
+        <p>Password :<input id="password" v-model="password" type="password"></p>
+
+        <div id="subDiv">
+            <p>Remember:<input id="remember" name="remember" value="1" type="checkbox"></p>
+            <button class="button" v-on:click="login()">login up</button>
+            <input type="reset" class="button" v-on:click="reset()" value="reset">&nbsp;&nbsp;&nbsp;
+            <a href="register.html">没有账号？点击注册</a>
+        </div>
+    </div>
+</div>
+
+<script src="js/axios-0.18.0.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- 引入样式 -->
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+<script>
+    new Vue({
+        el:"#login",
+        data(){
+            return{
+                username:"",
+                password:"",
+                errorMsg:""
+            }
+        },
+        methods:{
+            reset(){
+                this.username='';
+                this.password='';
+                this.errorMsg='';
+            },
+            login(){
+                var _this=this;
+                var param = new URLSearchParams();
+                param.append('username', this.username);
+                param.append('password', this.password);
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/Library/user/login?"+param,
+                }).then(function (resp) {
+                    if (resp.data=="success"){
+                        window.location.href="userindex.html";
+                    }else{
+                        _this.errorMsg="用户名或者密码错误";
+                    }
+                })
+            }
+        }
+
+    })
+</script>
+</body>
+</html>
